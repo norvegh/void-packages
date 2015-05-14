@@ -1,0 +1,37 @@
+# Template file for 'google-talkplugin'
+pkgname=google-talkplugin
+version=5.41.0.0
+revision=1
+short_desc="Video chat browser plugin for Google Talk"
+only_for_archs="i686 x86_64"
+maintainer="Norbert Vegh <vegh@norvegh.com>"
+license="custom:google"
+homepage="http://www.google.com/chat/video"
+hostmakedepends="wget rpmextract coreutils"
+
+package=google-talkplugin-${version}-1.${XBPS_TARGET_MACHINE}.rpm
+file=https://dl.google.com/linux/talkplugin/rpm/stable/${XBPS_TARGET_MACHINE}/${package}
+
+do_fetch()
+{
+    mkdir -p $wrksrc
+    cd $wrksrc
+    wget $file
+    if ! sha256sum -c $FILESDIR/${XBPS_TARGET_MACHINE}.sum; then
+        echo "INVALID CHECKSUM"
+        return -1
+    fi
+}
+
+do_extract()
+{
+    rpmextract ${package}
+}
+
+do_install()
+{
+    vcopy opt ""
+    mv usr/lib64 usr/lib
+    vcopy usr ""
+}
+
