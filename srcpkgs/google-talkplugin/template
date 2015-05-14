@@ -9,29 +9,30 @@ license="custom:google"
 homepage="http://www.google.com/chat/video"
 hostmakedepends="wget rpmextract coreutils"
 
-package=google-talkplugin-${version}-1.${XBPS_TARGET_MACHINE}.rpm
-file=https://dl.google.com/linux/talkplugin/rpm/stable/${XBPS_TARGET_MACHINE}/${package}
+_package=google-talkplugin-${version}-1.${XBPS_TARGET_MACHINE}.rpm
+_file=https://dl.google.com/linux/talkplugin/rpm/stable/${XBPS_TARGET_MACHINE}/${_package}
 
 do_fetch()
 {
-    mkdir -p $wrksrc
-    cd $wrksrc
-    wget $file
-    if ! sha256sum -c $FILESDIR/${XBPS_TARGET_MACHINE}.sum; then
-        echo "INVALID CHECKSUM"
-        return -1
-    fi
+	mkdir -p $wrksrc
+	cd $wrksrc
+	wget $_file
+	if ! sha256sum -c ${FILESDIR}/${XBPS_TARGET_MACHINE}.sum; then
+		echo "INVALID CHECKSUM"
+		return -1
+	fi
 }
 
 do_extract()
 {
-    rpmextract ${package}
+	rpmextract ${_package}
 }
 
 do_install()
 {
-    vcopy opt ""
-    mv usr/lib64 usr/lib
-    vcopy usr ""
+	vcopy opt ""
+	mv usr/lib64 usr/lib
+	vcopy usr ""
+	vlicense ${FILESDIR}/LICENCE
 }
 
