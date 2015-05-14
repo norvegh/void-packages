@@ -9,8 +9,14 @@ license="custom:google"
 homepage="http://www.google.com/chat/video"
 hostmakedepends="wget rpmextract coreutils"
 
-_package=google-talkplugin-${version}-1.${XBPS_TARGET_MACHINE}.rpm
-_file=https://dl.google.com/linux/talkplugin/rpm/stable/${XBPS_TARGET_MACHINE}/${_package}
+if [ ${XBPS_TARGET_MACHINE} = "i686" ]; then
+	_arch="i386"
+else
+	_arch="x86_64"
+fi
+
+_package=google-talkplugin-${version}-1.${_arch}.rpm
+_file=https://dl.google.com/linux/talkplugin/rpm/stable/${_arch}/${_package}
 
 do_fetch()
 {
@@ -31,7 +37,9 @@ do_extract()
 do_install()
 {
 	vcopy opt ""
-	mv usr/lib64 usr/lib
+	if [ $_arch == "x86_64" ]; then
+		mv usr/lib64 usr/lib
+	fi
 	vcopy usr ""
 	vlicense ${FILESDIR}/LICENCE
 }
