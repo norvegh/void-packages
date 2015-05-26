@@ -1,0 +1,27 @@
+case "$ACTION" in
+pre)
+	rm -f /usr/lib/xulrunner-addons/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/xulrunner-addons/plugins/libnpo1d.so
+	rm -f /usr/lib/iceweasel/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/iceweasel/plugins/libnpo1d.so
+	rm -f /usr/lib/mozilla/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/mozilla/plugins/libnpo1d.so
+	rm -f /usr/lib/xulrunner/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/xulrunner/plugins/libnpo1d.so
+	rm -f /usr/lib/firefox/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/firefox/plugins/libnpo1d.so
+	rm -f /usr/lib/midbrowser/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/midbrowser/plugins/libnpo1d.so
+	rm -f /usr/lib/iceape/plugins/libnpgoogletalk.so
+	rm -f /usr/lib/iceape/plugins/libnpo1d.so
+	rm -f /usr/lib/chromium-browser/pepper/libppo1d.so
+	rm -f /usr/lib/chromium-browser/pepper/libppgoogletalk.so
+	rm -f /opt/google/chrome-beta/pepper/libppo1d.so
+	rm -f /opt/google/chrome-beta/pepper/libppgoogletalk.so
+	rm -f /opt/google/chrome-unstable/pepper/libppo1d.so
+	rm -f /opt/google/chrome-unstable/pepper/libppgoogletalk.so
+	rm -f /opt/google/chrome/pepper/libppo1d.so
+	rm -f /opt/google/chrome/pepper/libppgoogletalk.so
+	rm -rf opt/google/talkplugin
+	;;
+esac

@@ -7,40 +7,10 @@ only_for_archs="i686 x86_64"
 maintainer="Norbert Vegh <vegh@norvegh.com>"
 license="custom:google"
 homepage="http://www.google.com/chat/video"
-hostmakedepends="wget rpmextract coreutils"
-
-if [ ${XBPS_TARGET_MACHINE} = "i686" ]; then
-	_arch="i386"
-else
-	_arch="x86_64"
-fi
-
-_package=google-talkplugin-${version}-1.${_arch}.rpm
-_file=https://dl.google.com/linux/talkplugin/rpm/stable/${_arch}/${_package}
-
-do_fetch()
-{
-	mkdir -p $wrksrc
-	cd $wrksrc
-	wget $_file
-	if ! sha256sum -c ${FILESDIR}/${XBPS_TARGET_MACHINE}.sum; then
-		echo "INVALID CHECKSUM"
-		return -1
-	fi
-}
-
-do_extract()
-{
-	rpmextract ${_package}
-}
+depends="wget rpmextract coreutils"
 
 do_install()
 {
-	vcopy opt ""
-	if [ $_arch == "x86_64" ]; then
-		mv usr/lib64 usr/lib
-	fi
-	vcopy usr ""
 	vlicense ${FILESDIR}/LICENCE
 }
 

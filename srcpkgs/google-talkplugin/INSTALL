@@ -1,0 +1,73 @@
+#
+# This script will install the google-talpluging debian package
+#
+
+BUILD_DIR="./var/tmp/${PKGNAME}.build"
+
+do_install() {
+	mkdir -p "$BUILD_DIR"
+	if [ $ARCH = "i686" ]; then
+		_arch="i386"
+		checksum=ff6cecb0c629d95e3237911c7fd2f5aaa4258c4a78cb4bbf31919d36653a95af
+	else
+		_arch="x86_64"
+		checksum=9abd60b81597b00111da53d299c082ac2bc2663445ecbf803619224fc6114c9a
+	fi
+	_package=google-talkplugin-5.41.0.0-1.${_arch}.rpm
+	_file=https://dl.google.com/linux/talkplugin/rpm/stable/${_arch}/${_package}
+	wget -O $BUILD_DIR/$_package $_file && \
+		echo "$checksum  $_package" | ( cd $BUILD_DIR; sha256sum -c ) && \
+		( cd $BUILD_DIR; rpmextract ${_package} )
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
+	rm -rf /opt/google/talkplugin/
+	mkdir -p /opt/google/
+	mv $BUILD_DIR/opt/google/talkplugin opt/google/
+	mkdir -p usr/lib/xulrunner-addons/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/xulrunner-addons/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/xulrunner-addons/plugins/libnpo1d.so
+	mkdir -p usr/lib/iceweasel/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/iceweasel/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/iceweasel/plugins/libnpo1d.so
+	mkdir -p usr/lib/mozilla/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/mozilla/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/mozilla/plugins/libnpo1d.so
+	mkdir -p usr/lib/xulrunner/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/xulrunner/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/xulrunner/plugins/libnpo1d.so
+	mkdir -p usr/lib/firefox/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/firefox/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/firefox/plugins/libnpo1d.so
+	mkdir -p usr/lib/midbrowser/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/midbrowser/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/midbrowser/plugins/libnpo1d.so
+	mkdir -p usr/lib/iceape/plugins/
+	ln -s /opt/google/talkplugin/libnpgoogletalk.so /usr/lib/iceape/plugins/libnpgoogletalk.so
+	ln -s /opt/google/talkplugin/libnpo1d.so /usr/lib/iceape/plugins/libnpo1d.so
+	mkdir -p usr/lib/chromium-browser/pepper/
+	ln -s /opt/google/talkplugin/libppo1d.so /usr/lib/chromium-browser/pepper/libppo1d.so
+	ln -s /opt/google/talkplugin/libppgoogletalk.so /usr/lib/chromium-browser/pepper/libppgoogletalk.so
+	mkdir -p /opt/google/chrome-beta/pepper/
+	ln -s /opt/google/talkplugin/libppo1d.so /opt/google/chrome-beta/pepper/libppo1d.so
+	ln -s /opt/google/talkplugin/libppgoogletalk.so /opt/google/chrome-beta/pepper/libppgoogletalk.so
+	mkdir -p /opt/google/chrome-unstable/pepper/
+	ln -s /opt/google/talkplugin/libppo1d.so /opt/google/chrome-unstable/pepper/libppo1d.so
+	ln -s /opt/google/talkplugin/libppgoogletalk.so /opt/google/chrome-unstable/pepper/libppgoogletalk.so
+	mkdir -p /opt/google/chrome/pepper/
+	ln -s /opt/google/talkplugin/libppo1d.so /opt/google/chrome/pepper/libppo1d.so
+	ln -s /opt/google/talkplugin/libppgoogletalk.so /opt/google/chrome/pepper/libppgoogletalk.so
+}
+
+case "${ACTION}" in
+post)
+	do_install
+	RESULT=$?
+	rm -r $BUILD_DIR
+	if [ $RESULT -ne 0 ]; then
+		echo "Failed to extract package"
+		exit $RESULT
+	fi
+	;;
+esac
+
